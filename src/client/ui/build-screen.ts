@@ -2,6 +2,7 @@ import { LIBRARY, PRESETS, type Preset } from '../data/exercises'
 import { tempoSummary } from '../engine/tempo'
 import { buildPlan } from '../engine/plan'
 import { getState, setState } from '../state/store'
+import { computeStats } from '../storage/local'
 import type { Phase } from '../../shared/types'
 
 function fmt(s: number): string {
@@ -197,6 +198,17 @@ export function initBuildScreen(onBegin: () => void): void {
 
   // expose show/hide
   buildSection.style.display = 'flex'
+  loadBuildStreak()
+}
+
+function loadBuildStreak(): void {
+  const el = document.getElementById('buildStreak')
+  if (!el) return
+  computeStats().then((stats) => {
+    if (stats.streakCurrent > 0) {
+      el.innerHTML = `<b>${stats.streakCurrent}</b> day streak &mdash; ${stats.totalSessions} sessions total`
+    }
+  }).catch(() => { /* best-effort */ })
 }
 
 export function showBuildScreen(): void {
@@ -204,4 +216,5 @@ export function showBuildScreen(): void {
   document.getElementById('runScreen')!.classList.remove('show')
   document.getElementById('doneScreen')!.classList.remove('show')
   document.getElementById('phaseTag')!.textContent = 'Build'
+  loadBuildStreak()
 }

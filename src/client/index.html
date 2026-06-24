@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#141d19">
 </head>
 <body>
 <div class="wrap">
@@ -77,6 +81,7 @@
         <div class="stat"><div class="v" id="sMoves">0</div><div class="k">Moves</div></div>
         <div class="stat"><div class="v" id="sRounds">3</div><div class="k">Rounds</div></div>
       </div>
+      <div class="streak-line" id="buildStreak"></div>
       <button class="begin" id="beginBtn">Begin</button>
     </div>
   </section>
@@ -121,6 +126,7 @@
     <div class="phase-tag">Complete</div>
     <div class="big">That's the day<br><em>started right.</em></div>
     <p class="sub" id="doneStat" style="text-align:center"></p>
+    <div id="doneStats" class="done-stats"></div>
     <button class="begin" id="againBtn" style="width:auto;padding:14px 30px">Build again</button>
   </section>
 </div>

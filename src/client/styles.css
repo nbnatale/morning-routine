@@ -144,11 +144,26 @@ svg.ringsvg { position: absolute; inset: 0; width: 100%; height: 100%; transform
 .footline { text-align: center; margin-top: 11px; flex: 0 0 auto; }
 .footline button { background: none; border: none; color: var(--faint); text-decoration: underline; font-size: 12px; cursor: pointer; font-family: inherit; }
 
+/* ===== BUILD streak line ===== */
+.streak-line { font-size: 12.5px; color: var(--muted); text-align: center; min-height: 1.1em; }
+.streak-line b { color: var(--brass); font-family: "Fraunces", serif; font-size: 14px; font-weight: 500; }
+
 /* ===== DONE ===== */
 .done-screen { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; animation: fade .5s ease; }
 .done-screen.show { display: flex; }
 .done-screen .big { font-family: "Fraunces", serif; font-size: 33px; font-weight: 500; line-height: 1.15; }
 .done-screen .big em { font-style: italic; color: var(--brass); }
+
+.done-stats { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 14px; }
+.done-stat-row { display: flex; justify-content: center; gap: 28px; }
+.done-stat .v { font-family: "Fraunces", serif; font-size: 30px; font-weight: 500; line-height: 1; }
+.done-stat .k { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+/* 12-week heatmap: 12 cols × 7 rows = 84 days */
+.heatmap { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+.hm-cell { aspect-ratio: 1; border-radius: 2px; background: var(--surface2); }
+.hm-cell.lv1 { background: var(--sage); opacity: .55; }
+.hm-cell.lv2 { background: var(--sage); }
 
 @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
 .pulse { animation: pulse .9s ease infinite; }
