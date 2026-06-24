@@ -8,4 +8,11 @@ directory = "./dist"
 run_worker_first = ["/api/*"]
 not_found_handling = "single-page-application"
 
-# D1 and KV bindings are not provisioned yet. See CLOUDFLARE_DEPLOYMENT_GUIDE.md.
+[[d1_databases]]
+binding = "DB"
+database_name = "morning-routine-db"
+database_id = "8bb113d0-b98d-439d-b902-38b030b89b61"
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "20a17b1d77374dfba94792d2266140b2"
