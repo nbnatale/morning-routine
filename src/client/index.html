@@ -10,7 +10,120 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div id="app"></div>
-  <script type="module" src="./main.ts"></script>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Morning Routine<span class="dot">.</span></div>
+    <div class="phase-tag" id="phaseTag">Build</div>
+  </div>
+
+  <!-- BUILD -->
+  <section class="build" id="buildScreen" style="display:none">
+    <div>
+      <div class="lede">Build your <em>quiet</em><br>morning set.</div>
+      <p class="sub">Start from a focus, then fine-tune. No jumping, made for bare feet and floors with neighbours below. Tap any exercise to learn the form.</p>
+    </div>
+
+    <div>
+      <div class="opt-label">Focus <span>preset starting points</span></div>
+      <div class="focus-row" id="focusRow"></div>
+    </div>
+
+    <div class="group" id="grp-warmup">
+      <div class="group-head">
+        <div class="group-title">Warm-up</div>
+        <div class="group-count" id="cnt-warmup"></div>
+      </div>
+    </div>
+    <div class="group" id="grp-circuit">
+      <div class="group-head">
+        <div class="group-title">Circuit</div>
+        <div class="group-count" id="cnt-circuit"></div>
+      </div>
+    </div>
+    <div class="group" id="grp-cooldown">
+      <div class="group-head">
+        <div class="group-title">Cool-down</div>
+        <div class="group-count" id="cnt-cooldown"></div>
+      </div>
+    </div>
+
+    <div class="settings">
+      <div>
+        <div class="opt-label">Rounds <span>circuit repeats</span></div>
+        <div class="seg" id="roundSeg">
+          <button data-r="2">2</button>
+          <button data-r="3" class="on">3</button>
+          <button data-r="4">4</button>
+          <button data-r="5">5</button>
+        </div>
+      </div>
+      <div>
+        <div class="opt-label">Intensity <span>length of each move</span></div>
+        <div class="seg" id="intSeg">
+          <button data-p="easy">Easy</button>
+          <button data-p="steady" class="on">Steady</button>
+          <button data-p="strong">Strong</button>
+        </div>
+      </div>
+      <button class="switch-row" id="metroRow" type="button">
+        <span class="lbl">Tempo metronome<small>Soft tick on each rep to set your pace</small></span>
+        <span class="switch on" id="metroSwitch"><i></i></span>
+      </button>
+    </div>
+
+    <div class="summary">
+      <div class="summary-stats">
+        <div class="stat"><div class="v" id="sTime">0:00</div><div class="k">Total time</div></div>
+        <div class="stat"><div class="v" id="sMoves">0</div><div class="k">Moves</div></div>
+        <div class="stat"><div class="v" id="sRounds">3</div><div class="k">Rounds</div></div>
+      </div>
+      <button class="begin" id="beginBtn">Begin</button>
+    </div>
+  </section>
+
+  <!-- RUN -->
+  <section class="run" id="runScreen">
+    <div class="roundrow" id="roundRow"></div>
+    <div class="dial">
+      <div class="run-head">
+        <div class="kindlbl" id="kindLbl">Work</div>
+        <div class="exname-run" id="exName">—</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ringsvg" viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="46"></circle>
+          <circle class="prog" id="ring" cx="50" cy="50" r="46"></circle>
+        </svg>
+        <div class="breath" id="breath"></div>
+        <div class="center"><div class="clock" id="clock">0:00</div></div>
+      </div>
+      <div class="pacer">
+        <div class="pacer-phase" id="pacerPhase">Ready</div>
+        <div class="pacer-meta" id="pacerMeta"></div>
+        <div class="cue-run" id="cueRun"></div>
+      </div>
+    </div>
+    <div class="nextup" id="nextUp"></div>
+    <div class="controls">
+      <button class="ctl" id="prevBtn" aria-label="Previous">
+        <svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"></polyline></svg>
+      </button>
+      <button class="ctl play paused" id="playBtn" aria-label="Play or pause"></button>
+      <button class="ctl" id="nextBtn" aria-label="Skip">
+        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"></polyline></svg>
+      </button>
+    </div>
+    <div class="footline"><button id="quitBtn">End session</button></div>
+  </section>
+
+  <!-- DONE -->
+  <section class="done-screen" id="doneScreen">
+    <div class="phase-tag">Complete</div>
+    <div class="big">That's the day<br><em>started right.</em></div>
+    <p class="sub" id="doneStat" style="text-align:center"></p>
+    <button class="begin" id="againBtn" style="width:auto;padding:14px 30px">Build again</button>
+  </section>
+</div>
+<script type="module" src="./main.ts"></script>
 </body>
 </html>
