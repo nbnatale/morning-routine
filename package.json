@@ -1,0 +1,32 @@
+{
+  "name": "morning-routine",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n vite,worker -c cyan,yellow \"vite\" \"wrangler dev --port 8787\"",
+    "dev:client": "vite",
+    "dev:worker": "wrangler dev --port 8787",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json",
+    "lint": "eslint src",
+    "format": "prettier --write src",
+    "seed:local": "wrangler d1 execute morning-routine-db --local --file=scripts/seed.sql",
+    "seed:remote": "wrangler d1 execute morning-routine-db --remote --file=scripts/seed.sql"
+  },
+  "dependencies": {
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250617.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "concurrently": "^9.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.8.0",
+    "vite": "^6.0.0",
+    "wrangler": "^4.0.0"
+  }
+}

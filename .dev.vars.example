@@ -1,0 +1,7 @@
+# Copy to .dev.vars (gitignored) and fill in values for local dev.
+# Generate SESSION_SECRET with: openssl rand -base64 32
+
+SESSION_SECRET=replace-with-a-long-random-string
+RESEND_API_KEY=re_...your_resend_key...
+RP_ID=localhost
+RP_ORIGIN=http://localhost:5173

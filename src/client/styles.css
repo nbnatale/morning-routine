@@ -1,0 +1,38 @@
+/* Hotel Albatross design tokens — expanded in Phase 1 */
+:root {
+  --bg: #141d19;
+  --bg2: #0f1714;
+  --surface: #1d2924;
+  --surface2: #243330;
+  --surface3: #2c3d38;
+  --ink: #ece3d4;
+  --muted: #93a097;
+  --faint: #6f7d75;
+  --brass: #c9a35e;
+  --terra: #cd6f4c;
+  --sage: #7fa386;
+  --line: rgba(236, 227, 212, 0.10);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: radial-gradient(120% 80% at 50% -10%, #1c2a24 0%, var(--bg) 45%, var(--bg2) 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  min-height: 100dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Morning Routine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#141d19; --bg2:#0f1714;
+    --surface:#1d2924; --surface2:#243330; --surface3:#2c3d38;
+    --ink:#ece3d4; --muted:#93a097; --faint:#6f7d75;
+    --brass:#c9a35e; --terra:#cd6f4c; --sage:#7fa386;
+    --line:rgba(236,227,212,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(120% 80% at 50% -10%,#1c2a24 0%,var(--bg) 45%,var(--bg2) 100%);
+    background-attachment:fixed; color:var(--ink); min-height:100dvh;
+  }
+  .wrap{width:100%;max-width:560px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;
+    padding:max(16px,env(safe-area-inset-top)) 18px max(20px,env(safe-area-inset-bottom));}
+
+  .topbar{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;flex:0 0 auto}
+  .brand{font-family:"Fraunces",serif;font-weight:500;font-size:19px;letter-spacing:.2px}
+  .brand .dot{color:var(--brass)}
+  .phase-tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+  /* ============ BUILD ============ */
+  .build{flex:1;display:flex;flex-direction:column;gap:22px;animation:fade .4s ease}
+  .lede{font-family:"Fraunces",serif;font-size:27px;line-height:1.16;font-weight:500}
+  .lede em{font-style:italic;color:var(--brass)}
+  .sub{color:var(--muted);font-size:14px;line-height:1.6;margin-top:10px}
+
+  .opt-label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:9px;display:flex;justify-content:space-between;align-items:baseline}
+  .opt-label span{text-transform:none;letter-spacing:0;color:var(--faint);font-weight:400;font-size:11.5px}
+
+  /* focus presets */
+  .focus-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none;margin:0 -18px;padding-left:18px;padding-right:18px}
+  .focus-row::-webkit-scrollbar{display:none}
+  .fpill{flex:0 0 auto;background:var(--surface);border:1px solid var(--line);color:var(--ink);padding:10px 16px;border-radius:22px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit;transition:.18s}
+  .fpill.on{background:var(--brass);border-color:var(--brass);color:#1a130a}
+  .fpill:active{transform:scale(.96)}
+
+  .group{display:flex;flex-direction:column;gap:9px}
+  .group-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1px}
+  .group-title{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:600}
+  .group-count{font-size:12px;color:var(--faint)}
+
+  .exrow{background:var(--surface);border:1px solid var(--line);border-radius:13px;overflow:hidden;transition:border-color .2s}
+  .exrow.on{border-color:rgba(201,163,94,.4)}
+  .exrow-top{display:flex;align-items:center;gap:12px;padding:13px 14px}
+  .tog{flex:0 0 auto;width:25px;height:25px;border-radius:50%;border:2px solid var(--faint);background:transparent;cursor:pointer;display:grid;place-items:center;transition:.18s}
+  .tog svg{width:13px;height:13px;stroke:#1a130a;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:.15s}
+  .exrow.on .tog{background:var(--brass);border-color:var(--brass)}
+  .exrow.on .tog svg{opacity:1}
+  .exmain{flex:1;min-width:0;cursor:pointer}
+  .exname{font-family:"Fraunces",serif;font-size:16.5px;font-weight:500}
+  .exmeta{font-size:12px;color:var(--muted);margin-top:1px}
+  .chev{flex:0 0 auto;color:var(--faint);transition:transform .25s;cursor:pointer;padding:4px}
+  .chev svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .exrow.open .chev{transform:rotate(180deg)}
+  .exdetail{max-height:0;overflow:hidden;transition:max-height .3s ease;border-top:1px solid transparent}
+  .exrow.open .exdetail{max-height:680px;border-top-color:var(--line)}
+  .exdetail-in{padding:13px 15px 16px}
+  .how{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+  .how li{position:relative;padding-left:24px;font-size:13.5px;line-height:1.5;color:var(--ink)}
+  .how li .num{position:absolute;left:0;top:0;font-family:"Fraunces",serif;font-size:13px;color:var(--brass);font-weight:600}
+  .note{display:flex;gap:8px;font-size:12.5px;line-height:1.5;color:var(--muted);margin-top:7px}
+  .note b{color:var(--ink);font-weight:600}
+  .note .ic{color:var(--brass);flex:0 0 auto;font-family:"Fraunces",serif;font-weight:600}
+  .tempo-chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface3);border-radius:20px;padding:5px 11px;font-size:12px;color:var(--ink);margin-top:11px}
+  .tempo-chip b{color:var(--brass);font-weight:600}
+
+  .settings{display:flex;flex-direction:column;gap:18px}
+  .seg{display:flex;gap:8px}
+  .seg button{flex:1;background:var(--surface);border:1px solid var(--line);color:var(--ink);padding:12px 0;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;transition:.18s;font-family:inherit}
+  .seg button.on{background:var(--brass);border-color:var(--brass);color:#1a130a}
+  .seg button:active{transform:scale(.97)}
+  .switch-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px;width:100%;cursor:pointer;font-family:inherit;text-align:left}
+  .switch-row .lbl{font-size:14.5px;color:var(--ink)}
+  .switch-row .lbl small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+  .switch{width:48px;height:28px;border-radius:20px;background:var(--surface3);border:none;position:relative;transition:.2s;flex:0 0 auto}
+  .switch.on{background:var(--brass)}
+  .switch i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--ink);transition:.2s}
+  .switch.on i{left:23px;background:#1a130a}
+
+  .summary{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
+  .summary-stats{display:flex;gap:20px;flex-wrap:wrap}
+  .stat .v{font-family:"Fraunces",serif;font-size:26px;font-weight:500;line-height:1}
+  .stat .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .begin{background:var(--brass);color:#1a130a;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;transition:.18s}
+  .begin:active{transform:scale(.98)}
+  .begin:disabled{background:var(--surface3);color:var(--faint);cursor:not-allowed}
+
+  /* ============ RUN ============ */
+  .run{flex:1;display:none;flex-direction:column;animation:fade .4s ease;min-height:0}
+  .run.show{display:flex}
+  .roundrow{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex:0 0 auto}
+  .pip{height:4px;flex:1;border-radius:2px;background:var(--surface2);overflow:hidden}
+  .pip i{display:block;height:100%;width:0;background:var(--brass);transition:width .3s}
+
+  .dial{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;gap:2px}
+  .run-head{text-align:center;margin-bottom:6px}
+  .kindlbl{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .exname-run{font-family:"Fraunces",serif;font-size:clamp(21px,6vw,27px);line-height:1.1;font-weight:500;margin-top:3px}
+
+  .ring-wrap{position:relative;width:min(60vw,236px);aspect-ratio:1;flex:0 0 auto}
+  svg.ringsvg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+  .track{fill:none;stroke:var(--surface2);stroke-width:3.5}
+  .prog{fill:none;stroke:var(--brass);stroke-width:3.5;stroke-linecap:round;transition:stroke .3s}
+  /* breathing orb */
+  .breath{position:absolute;inset:0;margin:auto;width:80%;height:80%;border-radius:50%;
+    background:radial-gradient(circle,rgba(205,111,76,.30) 0%,rgba(205,111,76,.12) 64%,rgba(205,111,76,0) 70%);
+    border:2.5px solid var(--terra);
+    transform:scale(.4);
+    transition:transform .09s linear,border-color .25s,background .25s,opacity .25s;
+    will-change:transform}
+  .breath.ease{border-color:var(--sage);
+    background:radial-gradient(circle,rgba(127,163,134,.30) 0%,rgba(127,163,134,.12) 64%,rgba(127,163,134,0) 70%)}
+  .center{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
+  .clock{font-family:"Fraunces",serif;font-weight:500;font-size:clamp(40px,12.5vw,56px);line-height:1;font-variant-numeric:tabular-nums}
+
+  .pacer{flex:0 0 auto;text-align:center;margin-top:16px}
+  .pacer-phase{font-family:"Fraunces",serif;font-size:23px;font-weight:500;letter-spacing:.4px;transition:color .15s;min-height:1.3em}
+  .pacer-meta{font-size:12.5px;color:var(--muted);display:flex;justify-content:center;gap:14px;min-height:1.2em;margin-top:7px}
+  .pacer-meta b{color:var(--ink);font-weight:600}
+  .cue-run{font-size:12.5px;color:var(--faint);line-height:1.45;margin-top:8px;max-width:340px;margin-left:auto;margin-right:auto;min-height:2.4em}
+
+  .nextup{text-align:center;margin-top:10px;flex:0 0 auto}
+  .nextup .l{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .nextup .n{font-family:"Fraunces",serif;font-size:15px;margin-top:1px}
+
+  .controls{display:flex;align-items:center;justify-content:center;gap:15px;margin-top:12px;flex:0 0 auto}
+  .ctl{background:var(--surface);border:1px solid var(--line);color:var(--ink);width:50px;height:50px;border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:.18s}
+  .ctl:active{transform:scale(.92)}
+  .ctl svg{width:20px;height:20px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .play{width:70px;height:70px;background:var(--brass);border-color:var(--brass)}
+  .play svg{width:28px;height:28px;stroke:#1a130a;fill:#1a130a}
+  .play.paused{background:var(--terra);border-color:var(--terra)}
+  .footline{text-align:center;margin-top:11px;flex:0 0 auto}
+  .footline button{background:none;border:none;color:var(--faint);text-decoration:underline;font-size:12px;cursor:pointer;font-family:inherit}
+
+  /* ============ DONE ============ */
+  .done-screen{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;animation:fade .5s ease}
+  .done-screen.show{display:flex}
+  .done-screen .big{font-family:"Fraunces",serif;font-size:33px;font-weight:500;line-height:1.15}
+  .done-screen .big em{font-style:italic;color:var(--brass)}
+
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .pulse{animation:pulse .9s ease infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  @media (prefers-reduced-motion:reduce){.breath{transition:border-color .25s,background .25s}*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Morning Routine<span class="dot">.</span></div>
+    <div class="phase-tag" id="phaseTag">Build</div>
+  </div>
+
+  <!-- BUILD -->
+  <section class="build" id="buildScreen">
+    <div>
+      <div class="lede">Build your <em>quiet</em><br>morning set.</div>
+      <p class="sub">Start from a focus, then fine-tune. No jumping, made for bare feet and floors with neighbours below. Tap any exercise to learn the form.</p>
+    </div>
+
+    <div>
+      <div class="opt-label">Focus <span>preset starting points</span></div>
+      <div class="focus-row" id="focusRow"></div>
+    </div>
+
+    <div class="group" id="grp-warmup"><div class="group-head"><div class="group-title">Warm-up</div><div class="group-count" id="cnt-warmup"></div></div></div>
+    <div class="group" id="grp-circuit"><div class="group-head"><div class="group-title">Circuit</div><div class="group-count" id="cnt-circuit"></div></div></div>
+    <div class="group" id="grp-cooldown"><div class="group-head"><div class="group-title">Cool-down</div><div class="group-count" id="cnt-cooldown"></div></div></div>
+
+    <div class="settings">
+      <div>
+        <div class="opt-label">Rounds <span>circuit repeats</span></div>
+        <div class="seg" id="roundSeg"><button data-r="2">2</button><button data-r="3" class="on">3</button><button data-r="4">4</button><button data-r="5">5</button></div>
+      </div>
+      <div>
+        <div class="opt-label">Intensity <span>length of each move</span></div>
+        <div class="seg" id="intSeg"><button data-p="easy">Easy</button><button data-p="steady" class="on">Steady</button><button data-p="strong">Strong</button></div>
+      </div>
+      <button class="switch-row" id="metroRow" type="button">
+        <span class="lbl">Tempo metronome<small>Soft tick on each rep to set your pace</small></span>
+        <span class="switch on" id="metroSwitch"><i></i></span>
+      </button>
+    </div>
+
+    <div class="summary">
+      <div class="summary-stats">
+        <div class="stat"><div class="v" id="sTime">0:00</div><div class="k">Total time</div></div>
+        <div class="stat"><div class="v" id="sMoves">0</div><div class="k">Moves</div></div>
+        <div class="stat"><div class="v" id="sRounds">3</div><div class="k">Rounds</div></div>
+      </div>
+      <button class="begin" id="beginBtn">Begin</button>
+    </div>
+  </section>
+
+  <!-- RUN -->
+  <section class="run" id="runScreen">
+    <div class="roundrow" id="roundRow"></div>
+    <div class="dial">
+      <div class="run-head">
+        <div class="kindlbl" id="kindLbl">Work</div>
+        <div class="exname-run" id="exName">—</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ringsvg" viewBox="0 0 100 100">
+          <circle class="track" cx="50" cy="50" r="46"></circle>
+          <circle class="prog" id="ring" cx="50" cy="50" r="46"></circle>
+        </svg>
+        <div class="breath" id="breath"></div>
+        <div class="center"><div class="clock" id="clock">0:00</div></div>
+      </div>
+      <div class="pacer">
+        <div class="pacer-phase" id="pacerPhase">Ready</div>
+        <div class="pacer-meta" id="pacerMeta"></div>
+        <div class="cue-run" id="cueRun"></div>
+      </div>
+    </div>
+    <div class="nextup" id="nextUp"></div>
+    <div class="controls">
+      <button class="ctl" id="prevBtn" aria-label="Previous"><svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"></polyline></svg></button>
+      <button class="ctl play paused" id="playBtn" aria-label="Play or pause"></button>
+      <button class="ctl" id="nextBtn" aria-label="Skip"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"></polyline></svg></button>
+    </div>
+    <div class="footline"><button id="quitBtn">End session</button></div>
+  </section>
+
+  <!-- DONE -->
+  <section class="done-screen" id="doneScreen">
+    <div class="phase-tag">Complete</div>
+    <div class="big">That's the day<br><em>started right.</em></div>
+    <p class="sub" id="doneStat" style="text-align:center"></p>
+    <button class="begin" id="againBtn" style="width:auto;padding:14px 30px">Build again</button>
+  </section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LIB = {
+    warmup:[
+      {id:"arms",name:"Arm circles",tag:"Shoulders",on:true,dur:30,
+       tempo:{kind:"flow",phases:[{l:"Circle forward",d:5},{l:"Circle back",d:5,ease:true}]},
+       how:["Stand tall, arms straight out to the sides at shoulder height.","Draw slow circles about the size of a dinner plate — 15 forward, then reverse.","Keep your shoulders down, away from your ears."],
+       quiet:"Warms the shoulders for push-ups."},
+      {id:"swings",name:"Leg swings",tag:"Hips",on:true,dur:30,
+       tempo:{kind:"flow",phases:[{l:"Swing forward",d:1},{l:"Swing back",d:1,ease:true}]},
+       how:["Hold a wall or doorframe for balance.","Swing one leg forward and back like a relaxed pendulum, letting the hip open.","Keep your torso upright and core lightly braced. Switch legs at the halfway point."],
+       quiet:"Loosens hips and hamstrings before squats and lunges."},
+      {id:"hipc",name:"Hip circles",tag:"Hips",on:false,dur:30,
+       tempo:{kind:"flow",phases:[{l:"Circle one way",d:6},{l:"Circle the other",d:6,ease:true}]},
+       how:["Hands on hips, feet shoulder-width apart.","Draw big slow circles with your beltline, like working a hula hoop.","Half the time one direction, half the other."],
+       quiet:"Opens the hips and lower back."},
+      {id:"catcow",name:"Cat-cow",tag:"Spine",on:false,dur:30,
+       tempo:{kind:"hold",phases:[{l:"Inhale, drop & open",d:3},{l:"Exhale, round up",d:3,ease:true}]},
+       how:["On hands and knees, wrists under shoulders, knees under hips.","Inhale: drop your belly, lift your chest and tailbone (cow).","Exhale: round your spine to the ceiling, tuck your chin and tail (cat).","Move with your breath, slow and smooth."],
+       quiet:"Wakes up the spine — good if you sit a lot."},
+      {id:"wsquat",name:"Slow squats",tag:"Legs",on:true,dur:35,
+       tempo:{kind:"reps",phases:[{l:"Lower slowly",d:3},{l:"Stand tall",d:2,ease:true}]},
+       how:["Feet shoulder-width, toes turned slightly out.","Sink down slowly over three counts, as deep as is comfortable.","Stand back up over two counts. No load yet — this just greases the knees and hips."],
+       quiet:"Stay flat-footed and quiet; no bouncing at the bottom."}
+    ],
+    circuit:[
+      {id:"squat",name:"Squats",tag:"Legs",on:true,dur:40,
+       tempo:{kind:"reps",phases:[{l:"Lower",d:2},{l:"Drive up",d:1,ease:true}]},
+       how:["Stand feet shoulder-width, toes slightly out, core braced.","Push your hips back and bend your knees, lowering until your thighs are about parallel to the floor.","Keep your weight in your heels and chest up; let your knees track out over your toes.","Drive through the whole foot to stand tall, squeezing your glutes at the top."],
+       mistake:"Knees caving inward or heels lifting — push the knees out and sit back into the heels.",
+       quiet:"Stay flat-footed; control the descent so there's no thud."},
+      {id:"pushup",name:"Push-ups",tag:"Chest · arms",on:true,dur:30,
+       tempo:{kind:"reps",phases:[{l:"Lower",d:2},{l:"Press up",d:1,ease:true}]},
+       how:["Hands slightly wider than your shoulders, body in one straight line from head to heels.","Lower your chest toward the floor, elbows angled about 45° from your body — not flared straight out.","Press back up, keeping your core and glutes tight so your hips don't sag.","Scale it: drop to your knees, or put your hands on the bed for an incline."],
+       mistake:"Hips sagging or sticking up — brace your core and squeeze your glutes to hold the plank line.",
+       quiet:"Lower with control; no flopping to the floor."},
+      {id:"lunge",name:"Reverse lunges",tag:"Legs",on:true,dur:40,
+       tempo:{kind:"alt",per:"side",phases:[{l:"Step back & lower",d:2},{l:"Drive up",d:1,ease:true}]},
+       how:["Stand tall, hands on your hips or by your sides.","Step one foot straight back and lower until both knees bend to about 90°, front shin vertical.","Push through your front heel to return to standing.","Alternate legs each rep. Stepping back rather than forward is gentler on the knees and quieter."],
+       mistake:"Front knee drifting past the toes — keep the front shin vertical and the weight in that heel.",
+       quiet:"Place the back foot down softly rather than tapping it."},
+      {id:"plank",name:"Plank",tag:"Core",on:true,dur:30,
+       tempo:{kind:"hold",phases:[{l:"Breathe in",d:4},{l:"Breathe out",d:4,ease:true}]},
+       how:["Forearms on the floor, elbows directly under your shoulders, toes tucked under.","Form one straight line from your head to your heels.","Squeeze your glutes and brace your abs as if bracing to be poked.","Breathe steadily — don't hold your breath."],
+       mistake:"Hips piking up or sagging down — hold a flat line from shoulders to heels.",
+       quiet:"Fully silent — a perfect third-floor move."},
+      {id:"bridge",name:"Glute bridges",tag:"Glutes",on:true,dur:30,
+       tempo:{kind:"reps",phases:[{l:"Drive hips up",d:1},{l:"Squeeze",d:1},{l:"Lower slowly",d:2,ease:true}]},
+       how:["Lie on your back, knees bent, feet flat and hip-width, arms by your sides.","Press through your heels and lift your hips until knees, hips and shoulders form a straight line.","Squeeze your glutes hard at the top and pause.","Lower slowly with control — don't just drop."],
+       mistake:"Arching the lower back instead of using the glutes — keep ribs down and squeeze the glutes to lift.",
+       quiet:"Silent and floor-based."},
+      {id:"taps",name:"Shoulder taps",tag:"Core · full body",on:true,dur:30,
+       tempo:{kind:"alt",per:"tap",phases:[{l:"Tap shoulder",d:1},{l:"Other hand",d:1,ease:true}]},
+       how:["Start in a high plank (hands under shoulders), feet a little wider than usual for stability.","Without letting your hips rock side to side, lift one hand and tap the opposite shoulder.","Return it and switch hands. Slow and steady beats fast.","This is the quiet stand-in for mountain climbers — same core and shoulder work, no jumping."],
+       mistake:"Hips swaying with each tap — widen your feet and brace hard to keep them still.",
+       quiet:"No impact at all — the whole point of the swap."},
+      {id:"wallsit",name:"Wall sit",tag:"Legs",on:false,dur:35,
+       tempo:{kind:"hold",phases:[{l:"Breathe in",d:4},{l:"Breathe out",d:4,ease:true}]},
+       how:["Stand with your back flat against a wall.","Slide down until your thighs are parallel to the floor and your knees are stacked over your ankles.","Hold the position, weight in your heels, back flat on the wall.","Breathe steadily through the burn."],
+       mistake:"Knees pushing past the toes — walk your feet out until the shins are vertical.",
+       quiet:"Completely silent."},
+      {id:"deadbug",name:"Dead bugs",tag:"Core",on:false,dur:35,
+       tempo:{kind:"alt",per:"side",phases:[{l:"Extend & lower",d:2},{l:"Return",d:1,ease:true}]},
+       how:["Lie on your back, arms reaching straight up, knees bent 90° stacked over your hips.","Slowly lower your opposite arm and leg toward the floor while pressing your lower back flat into the ground.","Return to the start and switch sides.","Move slowly — control is the whole exercise."],
+       mistake:"Lower back arching off the floor — only reach as far as you can while keeping it pressed flat.",
+       quiet:"Floor-based and silent."},
+      {id:"birddog",name:"Bird dogs",tag:"Core · back",on:false,dur:35,
+       tempo:{kind:"alt",per:"side",phases:[{l:"Extend out",d:2},{l:"Hold",d:1},{l:"Return",d:1,ease:true}]},
+       how:["On hands and knees, wrists under shoulders, knees under hips.","Reach your opposite arm and leg straight out until they're level with your body.","Pause, keeping your hips square to the floor and core braced, then return with control.","Switch sides each rep."],
+       mistake:"Hips twisting toward the lifted leg — keep them level, as if balancing a glass on your back.",
+       quiet:"Silent and controlled."},
+      {id:"calf",name:"Calf raises",tag:"Legs",on:false,dur:30,
+       tempo:{kind:"reps",phases:[{l:"Rise up",d:1},{l:"Pause",d:1},{l:"Lower slowly",d:2,ease:true}]},
+       how:["Stand tall, feet hip-width — hold a wall for balance if you like.","Rise up onto the balls of your feet as high as you can.","Pause at the top, then lower your heels slowly back down.","Barefoot is ideal here for ankle and foot strength."],
+       mistake:"Bouncing through the reps — pause at the top and control the way down.",
+       quiet:"Lower softly so your heels don't tap the floor."},
+      {id:"dips",name:"Tricep dips",tag:"Arms",on:false,dur:30,
+       tempo:{kind:"reps",phases:[{l:"Lower",d:2},{l:"Press up",d:1,ease:true}]},
+       how:["Sit on the edge of a sturdy bed or chair, hands gripping the edge beside your hips, fingers pointing forward.","Slide your hips off the edge, legs out in front.","Bend your elbows straight back to lower your hips, then press back up.","Keep your elbows tracking backward, not flaring out to the sides."],
+       mistake:"Shrugging your shoulders up to your ears — keep them down and drive from the triceps.",
+       quiet:"Use a solid, non-creaky surface; move smoothly."},
+      {id:"sideplank",name:"Side plank",tag:"Core",on:false,dur:30,
+       tempo:{kind:"hold",phases:[{l:"Breathe in",d:4},{l:"Breathe out",d:4,ease:true}]},
+       how:["Lie on one side, forearm down with elbow under your shoulder.","Stack your feet and lift your hips so your body is one straight line.","Hold, breathing steadily; reach your top arm to the ceiling if you like.","Switch sides at the halfway point."],
+       mistake:"Hips sinking toward the floor — lift them and hold the straight line.",
+       quiet:"Silent."}
+    ],
+    cooldown:[
+      {id:"quad",name:"Quad stretch",tag:"Thighs",on:true,dur:30,
+       tempo:{kind:"hold",phases:[{l:"Hold & breathe",d:8}]},
+       how:["Stand tall, holding a wall for balance.","Pull one heel toward your glute, keeping your knees together and hips pushed slightly forward.","Feel the stretch down the front of your thigh. Switch legs at the halfway point."],
+       quiet:"Don't yank — ease in and let it soften."},
+      {id:"ham",name:"Hamstring stretch",tag:"Legs",on:true,dur:35,
+       tempo:{kind:"hold",phases:[{l:"Hold & breathe",d:8}]},
+       how:["Hinge forward from your hips with soft (not locked) knees and let your upper body hang.","Relax your neck and let your head be heavy.","Breathe into the stretch and let gravity do the work."],
+       quiet:"Soft knees protect your lower back."},
+      {id:"fig4",name:"Figure-4 glute stretch",tag:"Hips",on:false,dur:35,
+       tempo:{kind:"hold",phases:[{l:"Hold & breathe",d:8}]},
+       how:["Lie on your back. Cross one ankle over the opposite thigh, just above the knee.","Reach through and pull that thigh toward your chest.","Feel the stretch deep in the glute and hip. Switch sides at the halfway point."],
+       quiet:"Great after squats and lunges."},
+      {id:"chest",name:"Chest opener",tag:"Chest",on:true,dur:30,
+       tempo:{kind:"hold",phases:[{l:"Hold & breathe",d:8}]},
+       how:["Clasp your hands behind your back and gently lift them, opening across your collarbones.","Or rest a forearm on a doorframe and turn away from it.","Lift through your chest and breathe."],
+       quiet:"Counteracts the push-ups and hunched desk posture."},
+      {id:"child",name:"Child's pose",tag:"Back",on:true,dur:35,
+       tempo:{kind:"hold",phases:[{l:"Breathe in",d:5},{l:"Breathe out",d:5,ease:true}]},
+       how:["Kneel with big toes together and knees wide.","Sit back onto your heels and walk your hands forward, lowering your forehead toward the floor.","Let your chest melt down and breathe slowly into your back."],
+       quiet:"A calm finish to settle the breathing."},
+      {id:"twist",name:"Seated twist",tag:"Spine",on:false,dur:30,
+       tempo:{kind:"hold",phases:[{l:"Hold & breathe",d:8}]},
+       how:["Sit tall with one leg crossed over the other.","Rotate gently toward the top leg, using your opposite elbow against the knee as a gentle lever.","Keep your spine long. Switch sides at the halfway point."],
+       quiet:"Gentle — rotate only as far as is comfortable."}
+    ]
+  };
+
+  var PRESETS=[
+    {id:"standard",name:"Standard",rounds:3,intensity:"steady",
+     on:{warmup:["arms","swings","wsquat"],circuit:["squat","pushup","lunge","plank","bridge","taps"],cooldown:["quad","ham","chest","child"]}},
+    {id:"balanced",name:"Balanced",rounds:3,intensity:"steady",
+     on:{warmup:["arms","swings","hipc"],circuit:["squat","pushup","lunge","bridge","plank","birddog","taps"],cooldown:["quad","ham","chest","child","twist"]}},
+    {id:"strength",name:"Strength",rounds:4,intensity:"strong",
+     on:{warmup:["arms","swings","wsquat"],circuit:["squat","pushup","lunge","dips","bridge","plank","wallsit"],cooldown:["quad","ham","chest","child"]}},
+    {id:"legs",name:"Legs & glutes",rounds:4,intensity:"steady",
+     on:{warmup:["swings","hipc","wsquat"],circuit:["squat","lunge","bridge","wallsit","calf"],cooldown:["quad","ham","fig4"]}},
+    {id:"core",name:"Core",rounds:3,intensity:"steady",
+     on:{warmup:["catcow","hipc","wsquat"],circuit:["plank","deadbug","birddog","taps","sideplank","bridge"],cooldown:["child","twist","fig4"]}},
+    {id:"quick",name:"Quick",rounds:2,intensity:"steady",
+     on:{warmup:["arms","wsquat"],circuit:["squat","pushup","lunge","plank"],cooldown:["ham","child"]}}
+  ];
+
+  var PACE={easy:0.78,steady:1.0,strong:1.25};
+  var rounds=3,intensity="steady",metro=true,activePreset="standard";
+  var plan=[],idx=0,remaining=0,running=false,ticker=null,lastBeep=-1,lastRep=-1,wakeLock=null,endAt=0;
+  var R=46,CIRCUM=2*Math.PI*R;
+  var rowMap={},exById={};
+
+  var $=function(id){return document.getElementById(id);};
+  var ring=$("ring"); ring.style.strokeDasharray=CIRCUM;
+  function cssv(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+  /* AUDIO */
+  var actx=null;
+  function ensureAudio(){if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(actx&&actx.state==="suspended")actx.resume();}
+  function tone(f,d,v,type){if(!actx)return;try{var o=actx.createOscillator(),g=actx.createGain();o.type=type||"sine";o.frequency.value=f;g.gain.setValueAtTime(0,actx.currentTime);g.gain.linearRampToValueAtTime(v,actx.currentTime+0.008);g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+d);o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+d+0.02);}catch(e){}}
+  function countBeep(){tone(620,0.12,0.16);}
+  function goBeep(){tone(880,0.3,0.22);setTimeout(function(){tone(1175,0.18,0.18);},90);}
+  function restBeep(){tone(440,0.28,0.18);}
+  function repTick(){if(metro)tone(150,0.06,0.12,"triangle");}
+  function finishBeep(){[0,140,280,480].forEach(function(ms,i){setTimeout(function(){tone([660,880,990,1320][i],0.3,0.2);},ms);});}
+
+  /* WAKE LOCK */
+  async function lockScreen(){try{if("wakeLock" in navigator)wakeLock=await navigator.wakeLock.request("screen");}catch(e){}}
+  function releaseLock(){try{if(wakeLock){wakeLock.release();wakeLock=null;}}catch(e){}}
+  document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible"&&running)lockScreen();});
+
+  function fmt(s){s=Math.max(0,Math.ceil(s));var m=Math.floor(s/60),ss=s%60;return m+":"+(ss<10?"0":"")+ss;}
+  function cycleLen(t){return t.phases.reduce(function(a,p){return a+p.d;},0);}
+  function easeIO(x){return x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2;}
+
+  function tempoSummary(ex){var t=ex.tempo;if(t.kind==="hold")return "Hold steady · breathe";if(t.kind==="flow")return "Continuous · smooth";return "~"+cycleLen(t)+"s per rep";}
+
+  /* BUILD: focus pills */
+  function buildFocus(){
+    var row=$("focusRow");
+    PRESETS.forEach(function(p){
+      var b=document.createElement("button");
+      b.className="fpill"+(p.id===activePreset?" on":""); b.textContent=p.name; b.dataset.id=p.id;
+      b.addEventListener("click",function(){applyPreset(p);});
+      row.appendChild(b);
+    });
+  }
+  function syncFocus(){$("focusRow").querySelectorAll(".fpill").forEach(function(b){b.classList.toggle("on",b.dataset.id===activePreset);});}
+  function syncSegs(){
+    $("roundSeg").querySelectorAll("button").forEach(function(b){b.classList.toggle("on",+b.dataset.r===rounds);});
+    $("intSeg").querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.p===intensity);});
+  }
+  function syncRows(){for(var id in rowMap){rowMap[id].classList.toggle("on",exById[id].on);rowMap[id].classList.remove("open");}}
+  function applyPreset(p){
+    ["warmup","circuit","cooldown"].forEach(function(ph){LIB[ph].forEach(function(ex){ex.on=p.on[ph].indexOf(ex.id)>=0;});});
+    rounds=p.rounds;intensity=p.intensity;activePreset=p.id;
+    syncRows();syncSegs();syncFocus();refreshSummary();
+  }
+
+  /* BUILD: exercise rows */
+  function buildRows(){
+    ["warmup","circuit","cooldown"].forEach(function(phase){
+      var holder=$("grp-"+phase);
+      LIB[phase].forEach(function(ex){
+        exById[ex.id]=ex;
+        var row=document.createElement("div");
+        row.className="exrow"+(ex.on?" on":""); row.dataset.id=ex.id;
+        var how=ex.how.map(function(s,i){return '<li><span class="num">'+(i+1)+'</span>'+s+'</li>';}).join("");
+        var mistakeHtml=ex.mistake?'<div class="note"><span class="ic">!</span><span><b>Common slip:</b> '+ex.mistake+'</span></div>':'';
+        var quietHtml=ex.quiet?'<div class="note"><span class="ic">~</span><span><b>Quiet note:</b> '+ex.quiet+'</span></div>':'';
+        row.innerHTML=
+          '<div class="exrow-top">'+
+            '<button class="tog" aria-label="Include"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></button>'+
+            '<div class="exmain"><div class="exname">'+ex.name+'</div><div class="exmeta">'+ex.tag+' · '+tempoSummary(ex)+'</div></div>'+
+            '<div class="chev"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>'+
+          '</div>'+
+          '<div class="exdetail"><div class="exdetail-in"><ul class="how">'+how+'</ul>'+mistakeHtml+quietHtml+
+            '<div class="tempo-chip">Tempo&nbsp;<b>'+tempoSummary(ex)+'</b></div></div></div>';
+        row.querySelector(".tog").addEventListener("click",function(e){e.stopPropagation();ex.on=!ex.on;row.classList.toggle("on",ex.on);activePreset=null;syncFocus();refreshSummary();});
+        var expand=function(){row.classList.toggle("open");};
+        row.querySelector(".exmain").addEventListener("click",expand);
+        row.querySelector(".chev").addEventListener("click",expand);
+        holder.appendChild(row);
+        rowMap[ex.id]=row;
+      });
+    });
+  }
+
+  function selected(phase){return LIB[phase].filter(function(e){return e.on;});}
+  function estimate(){var p=buildPlan();return {total:p.reduce(function(a,s){return a+s.dur;},0),moves:p.filter(function(s){return s.type==="work";}).length};}
+  function refreshSummary(){
+    var e=estimate();
+    $("sTime").textContent=fmt(e.total);$("sMoves").textContent=e.moves;$("sRounds").textContent=rounds;
+    $("cnt-warmup").textContent=selected("warmup").length+" selected";
+    $("cnt-circuit").textContent=selected("circuit").length+" selected";
+    $("cnt-cooldown").textContent=selected("cooldown").length+" selected";
+    var ok=selected("circuit").length>0;
+    $("beginBtn").disabled=!ok;$("beginBtn").textContent=ok?"Begin":"Pick at least one circuit move";
+  }
+
+  /* PLAN */
+  function buildPlan(){
+    var mult=PACE[intensity]||1,seq=[];
+    var dd=function(sec){return Math.max(8,Math.round(sec*mult));};
+    selected("warmup").forEach(function(ex,i,arr){seq.push(makeSeg(ex,"Warm-up",dd(ex.dur),"warmup"));if(i<arr.length-1)seq.push(restSeg("Easy","Reset",6,"warmup","Shake it loose."));});
+    var circ=selected("circuit");
+    for(var r=1;r<=rounds;r++){
+      circ.forEach(function(ex,i){var s=makeSeg(ex,"Round "+r+" / "+rounds,dd(ex.dur),"circuit");s.round=r;seq.push(s);if(i<circ.length-1)seq.push(rt("Next: "+circ[i+1].name,"Transition",10,"circuit",r,"Set up, breathe."));});
+      if(r<rounds)seq.push(rt("Round rest","Recover",45,"circuit",r,"Water. Loosen the shoulders."));
+    }
+    var cool=selected("cooldown");
+    if(cool.length){
+      seq.push(restSeg("Cool down","Cool-down",8,"cooldown","Slow the breathing down."));
+      cool.forEach(function(ex,i){seq.push(makeSeg(ex,"Cool-down",dd(ex.dur),"cooldown"));if(i<cool.length-1)seq.push(restSeg("Ease","Cool-down",5,"cooldown","Move to the next gently."));});
+    }
+    return seq;
+  }
+  function makeSeg(ex,kind,dur,phase){return {type:"work",name:ex.name,kind:kind,dur:dur,phase:phase,tempo:ex.tempo,cue:(ex.mistake?ex.mistake:(ex.quiet||"")),ex:ex};}
+  function restSeg(name,kind,dur,phase,cue){return {type:"rest",name:name,kind:kind,dur:dur,phase:phase,cue:cue||""};}
+  function rt(name,kind,dur,phase,round,cue){var s=restSeg(name,kind,dur,phase,cue);s.round=round;return s;}
+
+  function renderPips(){$("roundRow").innerHTML="";for(var r=0;r<rounds;r++){var d=document.createElement("div");d.className="pip";d.innerHTML="<i></i>";$("roundRow").appendChild(d);}}
+  function curRound(){var s=plan[idx];return s&&s.round?s.round:(s&&s.phase==="cooldown"?rounds+1:0);}
+  function roundProgress(r){var done=0,tot=selected("circuit").length;for(var i=0;i<=idx;i++){if(plan[i].round===r&&plan[i].type==="work")done++;}return tot?Math.min(100,Math.round(done/tot*100)):0;}
+  function updatePips(){var cr=curRound(),pips=$("roundRow").querySelectorAll(".pip");pips.forEach(function(pip,i){var rn=i+1,f=pip.querySelector("i");if(rn<cr)f.style.width="100%";else if(rn===cr)f.style.width=roundProgress(rn)+"%";else f.style.width="0%";});}
+
+  function render(){
+    var s=plan[idx];
+    var col=s.type==="rest"?cssv("--sage"):(s.phase==="circuit"?cssv("--terra"):cssv("--brass"));
+    ring.style.stroke=col;
+    $("kindLbl").textContent=s.kind;$("exName").textContent=s.name;
+    $("phaseTag").textContent=s.phase==="warmup"?"Warming up":s.phase==="cooldown"?"Cooling down":(s.round?"Round "+s.round+" of "+rounds:"Circuit");
+    var nx=plan[idx+1];$("nextUp").innerHTML="<div class='l'>Up next</div><div class='n'>"+(nx?nx.name:"Finish")+"</div>";
+    $("cueRun").textContent=s.cue||"";
+    var pm=$("pacerMeta");
+    if(s.type==="work"&&s.tempo){
+      var t=s.tempo,cyc=cycleLen(t);
+      if(t.kind==="reps"||t.kind==="alt"){
+        var reps=Math.max(1,Math.round(s.dur/cyc));
+        var unit=t.per==="tap"?(reps+" taps"):(t.per==="side"?(reps+" reps · alternating"):("~"+reps+" reps"));
+        pm.innerHTML="<span><b>"+unit+"</b></span><span><b>"+cyc+"s</b>/rep</span>";
+      }else if(t.kind==="hold"){pm.innerHTML="<span><b>Hold</b> "+fmt(s.dur)+"</span>";}
+      else{pm.innerHTML="<span><b>Keep moving</b></span>";}
+    }else{pm.innerHTML="";}
+    updatePips();paint();
+  }
+
+  /* tempo phase (label + rep index) */
+  function tempoAt(t,elapsed){
+    var cyc=cycleLen(t),inCycle=elapsed%cyc,acc=0,phase=t.phases[0],pStart=0;
+    for(var i=0;i<t.phases.length;i++){var p=t.phases[i];if(inCycle<acc+p.d){phase=p;pStart=acc;break;}acc+=p.d;}
+    return {label:phase.l,ease:!!phase.ease,prog:(inCycle-pStart)/phase.d,repIndex:Math.floor(elapsed/cyc)};
+  }
+  /* breathing orb scale (0.4 .. 1.0) */
+  var MIN=0.4,MAX=1.0;
+  function orbScale(t,elapsed){
+    var cyc=cycleLen(t);
+    if(t.phases.length===1){
+      var ph=t.phases[0],x=(elapsed%ph.d)/ph.d;
+      var s=MIN+(MAX-MIN)*(0.5-0.5*Math.cos(2*Math.PI*x));
+      return {scale:s,ease:x>0.5};
+    }
+    var ends=[];
+    for(var i=0;i<t.phases.length;i++){var p=t.phases[i];ends.push(p.ease?MIN:MAX);}
+    var inCycle=elapsed%cyc,acc=0,ci=0,pStart=0;
+    for(i=0;i<t.phases.length;i++){if(inCycle<acc+t.phases[i].d){ci=i;pStart=acc;break;}acc+=t.phases[i].d;}
+    var prog=(inCycle-pStart)/t.phases[ci].d;
+    var startScale=ci===0?ends[ends.length-1]:ends[ci-1];
+    var endScale=ends[ci];
+    return {scale:startScale+(endScale-startScale)*easeIO(prog),ease:!!t.phases[ci].ease};
+  }
+
+  function paintPacer(){
+    var s=plan[idx],breath=$("breath"),phaseEl=$("pacerPhase");
+    if(s.type!=="work"||!s.tempo){
+      phaseEl.textContent=s.type==="rest"?"Rest":"";phaseEl.style.color="var(--muted)";
+      breath.style.transform="scale(0.5)";breath.style.opacity=".45";breath.classList.remove("ease");
+      return;
+    }
+    breath.style.opacity="1";
+    var elapsed=s.dur-remaining;if(elapsed<0)elapsed=0;
+    var st=tempoAt(s.tempo,elapsed),o=orbScale(s.tempo,elapsed);
+    phaseEl.textContent=st.label;
+    phaseEl.style.color=o.ease?cssv("--sage"):cssv("--ink");
+    breath.classList.toggle("ease",o.ease);
+    breath.style.transform="scale("+o.scale.toFixed(3)+")";
+    if((s.tempo.kind==="reps"||s.tempo.kind==="alt")&&st.repIndex!==lastRep){lastRep=st.repIndex;if(running&&elapsed>0.1)repTick();}
+  }
+
+  function paint(){
+    var s=plan[idx];
+    $("clock").textContent=fmt(remaining);
+    ring.style.strokeDashoffset=CIRCUM*(1-(s.dur>0?remaining/s.dur:0));
+    if(remaining<=3&&remaining>0&&running)$("clock").classList.add("pulse");else $("clock").classList.remove("pulse");
+    paintPacer();
+  }
+
+  function startTick(){endAt=performance.now()+remaining*1000;clearInterval(ticker);ticker=setInterval(loop,80);}
+  function loop(){
+    if(!running)return;
+    remaining=(endAt-performance.now())/1000;
+    var whole=Math.ceil(remaining);
+    if(whole<=3&&whole>=1&&whole!==lastBeep){lastBeep=whole;countBeep();}
+    if(remaining<=0){advance(true);return;}
+    paint();
+  }
+  function advance(auto){
+    if(idx>=plan.length-1){finish();return;}
+    idx++;lastBeep=-1;lastRep=-1;remaining=plan[idx].dur;render();
+    if(auto){plan[idx].type==="rest"?restBeep():goBeep();}
+    if(running)startTick();
+  }
+  function back(){
+    if(remaining<plan[idx].dur-1.2){remaining=plan[idx].dur;}else if(idx>0){idx--;remaining=plan[idx].dur;}
+    lastBeep=-1;lastRep=-1;render();if(running)startTick();
+  }
+
+  function setPlay(state){
+    running=state;
+    $("playBtn").classList.toggle("paused",!state);
+    $("playBtn").innerHTML=state?'<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>':'<svg viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4"></polygon></svg>';
+    if(state){ensureAudio();lockScreen();startTick();}else{clearInterval(ticker);$("clock").classList.remove("pulse");}
+  }
+  function begin(){
+    plan=buildPlan();if(!plan.length)return;
+    idx=0;remaining=plan[0].dur;lastBeep=-1;lastRep=-1;
+    $("buildScreen").style.display="none";$("doneScreen").classList.remove("show");$("runScreen").classList.add("show");
+    renderPips();render();ensureAudio();goBeep();setPlay(true);
+  }
+  function finish(){
+    running=false;clearInterval(ticker);releaseLock();finishBeep();
+    var total=plan.reduce(function(a,s){return a+s.dur;},0);
+    $("doneStat").textContent=fmt(total)+" of movement · "+rounds+" rounds. Same time tomorrow.";
+    $("runScreen").classList.remove("show");$("doneScreen").classList.add("show");$("phaseTag").textContent="Done";
+  }
+  function reset(){
+    running=false;clearInterval(ticker);releaseLock();
+    $("runScreen").classList.remove("show");$("doneScreen").classList.remove("show");
+    $("buildScreen").style.display="flex";$("phaseTag").textContent="Build";refreshSummary();
+  }
+
+  $("roundSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;rounds=+b.dataset.r;activePreset=null;syncSegs();syncFocus();refreshSummary();});
+  $("intSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;intensity=b.dataset.p;activePreset=null;syncSegs();syncFocus();refreshSummary();});
+  $("metroRow").addEventListener("click",function(){metro=!metro;$("metroSwitch").classList.toggle("on",metro);});
+  $("beginBtn").addEventListener("click",begin);
+  $("playBtn").addEventListener("click",function(){setPlay(!running);});
+  $("nextBtn").addEventListener("click",function(){advance(false);});
+  $("prevBtn").addEventListener("click",back);
+  $("quitBtn").addEventListener("click",reset);
+  $("againBtn").addEventListener("click",reset);
+  document.addEventListener("keydown",function(e){
+    if(!$("runScreen").classList.contains("show"))return;
+    if(e.code==="Space"){e.preventDefault();setPlay(!running);}
+    if(e.code==="ArrowRight")advance(false);
+    if(e.code==="ArrowLeft")back();
+  });
+
+  buildFocus();buildRows();syncSegs();refreshSummary();
+})();
+</script>
+</body>
+</html>
