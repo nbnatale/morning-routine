@@ -8,13 +8,17 @@ directory = "./dist"
 run_worker_first = ["/api/*"]
 not_found_handling = "single-page-application"
 
-# Fill in real IDs after running wrangler d1 create / wrangler kv namespace create
-# See CLOUDFLARE_DEPLOYMENT_GUIDE.md for the provisioning steps.
-[[d1_databases]]
-binding = "DB"
-database_name = "morning-routine-db"
-database_id = "PLACEHOLDER_D1_ID"
-
-[[kv_namespaces]]
-binding = "SESSIONS"
-id = "PLACEHOLDER_KV_ID"
+# D1 and KV are not used until Phase 3 (backend / auth).
+# Uncomment and fill in real IDs after running:
+#   wrangler d1 create morning-routine-db
+#   wrangler kv namespace create SESSIONS
+# See CLOUDFLARE_DEPLOYMENT_GUIDE.md for the full provisioning steps.
+#
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "morning-routine-db"
+# database_id = "PASTE_THE_D1_ID_HERE"
+#
+# [[kv_namespaces]]
+# binding = "SESSIONS"
+# id = "PASTE_THE_KV_ID_HERE"
