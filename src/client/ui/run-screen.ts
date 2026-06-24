@@ -115,7 +115,7 @@ export function initRunScreen(onFinish: (totalSec: number) => void, onQuit: () =
     render()
     if (auto) {
       const seg = getState().run.plan[nextIdx]
-      seg.type === 'rest' ? restBeep() : goBeep()
+      if (seg.type === 'rest') restBeep(); else goBeep()
     }
     if (getState().run.running) startTick()
   }
@@ -244,7 +244,6 @@ export function initRunScreen(onFinish: (totalSec: number) => void, onQuit: () =
   _startFn = start
 
   function start(): void {
-    const { run } = getState()
     lastBeep = -1; lastRep = -1
     renderPips(); render(); ensureAudio(); goBeep()
     setState((s) => { s.run.running = true })

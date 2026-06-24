@@ -9,11 +9,12 @@
     "dev:worker": "wrangler dev --port 8787",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json && tsc --noEmit -p tsconfig.scripts.json",
     "lint": "eslint src",
     "format": "prettier --write src",
-    "seed:local": "wrangler d1 execute morning-routine-db --local --file=scripts/seed.sql",
-    "seed:remote": "wrangler d1 execute morning-routine-db --remote --file=scripts/seed.sql"
+    "seed:gen": "tsx scripts/seed-exercises.ts",
+    "seed:local": "npm run seed:gen && wrangler d1 execute morning-routine-db --local --file=scripts/seed.sql",
+    "seed:remote": "npm run seed:gen && wrangler d1 execute morning-routine-db --remote --file=scripts/seed.sql"
   },
   "dependencies": {
     "hono": "^4.7.0",
@@ -21,12 +22,15 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250617.0",
+    "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "concurrently": "^9.0.0",
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",
+    "tsx": "^4.19.0",
     "typescript": "^5.8.0",
+    "typescript-eslint": "^8.0.0",
     "vite": "^6.0.0",
     "vite-plugin-pwa": "^1.3.0",
     "wrangler": "^4.0.0"

@@ -314,3 +314,12 @@ export function exerciseById(id: string): Exercise | undefined {
   }
   return undefined
 }
+
+// Replaces LIBRARY's contents in place (not the binding) so modules that
+// already imported LIBRARY see the API-sourced data once it lands.
+export function hydrateLibrary(next: Record<Phase, Exercise[]>): void {
+  for (const phase of Object.keys(LIBRARY) as Phase[]) {
+    LIBRARY[phase].length = 0
+    LIBRARY[phase].push(...next[phase])
+  }
+}
