@@ -1,6 +1,5 @@
 export interface Env {
-  // optional until real IDs are provisioned and uncommented in wrangler.toml
-  // (see CLOUDFLARE_DEPLOYMENT_GUIDE.md) — routes must check before using them
+  ASSETS: Fetcher
   DB?: D1Database
   SESSIONS?: KVNamespace
   // Phase 4+: uncomment when auth is implemented
