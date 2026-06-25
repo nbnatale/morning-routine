@@ -11,6 +11,15 @@ function fmt(s: number): string {
   return `${m}:${ss < 10 ? '0' : ''}${ss}`
 }
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 export function initBuildScreen(onBegin: () => void): void {
   const buildSection = document.getElementById('buildScreen')!
   const focusRow = document.getElementById('focusRow')!
@@ -152,11 +161,11 @@ export function initBuildScreen(onBegin: () => void): void {
         row.className = `exrow${getState().build.selected[ex.id] ? ' on' : ''}`
         row.dataset['id'] = ex.id
 
-        const howHtml = ex.how.map((s, i) => `<li><span class="num">${i + 1}</span>${s}</li>`).join('')
+        const howHtml = ex.how.map((s, i) => `<li><span class="num">${i + 1}</span>${escapeHtml(s)}</li>`).join('')
         const mistakeHtml = ex.mistake
-          ? `<div class="note"><span class="ic">!</span><span><b>Common slip:</b> ${ex.mistake}</span></div>` : ''
+          ? `<div class="note"><span class="ic">!</span><span><b>Common slip:</b> ${escapeHtml(ex.mistake)}</span></div>` : ''
         const quietHtml = ex.quiet
-          ? `<div class="note"><span class="ic">~</span><span><b>Quiet note:</b> ${ex.quiet}</span></div>` : ''
+          ? `<div class="note"><span class="ic">~</span><span><b>Quiet note:</b> ${escapeHtml(ex.quiet)}</span></div>` : ''
         const summary = tempoSummary(ex.tempo)
 
         row.innerHTML = `
@@ -165,8 +174,8 @@ export function initBuildScreen(onBegin: () => void): void {
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </button>
             <div class="exmain">
-              <div class="exname">${ex.name}</div>
-              <div class="exmeta">${ex.tag} · ${summary}</div>
+              <div class="exname">${escapeHtml(ex.name)}</div>
+              <div class="exmeta">${escapeHtml(ex.tag)} · ${summary}</div>
             </div>
             <div class="chev">
               <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
