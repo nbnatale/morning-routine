@@ -154,6 +154,8 @@ svg.ringsvg { position: absolute; inset: 0; width: 100%; height: 100%; transform
 .done-screen .big { font-family: "Fraunces", serif; font-size: 33px; font-weight: 500; line-height: 1.15; }
 .done-screen .big em { font-style: italic; color: var(--brass); }
 
+.done-next { font-size: 12px; color: var(--faint); text-align: center; letter-spacing: .04em; min-height: 1.1em; }
+.done-milestone { font-family: "Fraunces", serif; font-size: 15px; font-weight: 500; color: var(--brass); text-align: center; }
 .done-stats { width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .done-stat-row { display: flex; justify-content: center; gap: 28px; }
 .done-stat .v { font-family: "Fraunces", serif; font-size: 30px; font-weight: 500; line-height: 1; }

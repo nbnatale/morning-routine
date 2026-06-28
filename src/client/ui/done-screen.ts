@@ -1,7 +1,16 @@
 import { getState } from '../state/store'
-import { LIBRARY } from '../data/exercises'
+import { LIBRARY, PRESETS, ROTATION } from '../data/exercises'
 import { logSession, computeStats, type Stats } from '../storage/local'
 import type { WorkoutConfig } from '../../shared/types'
+
+const MILESTONES: Record<number, string> = {
+  7: 'Seven in a row.',
+  14: 'Two weeks straight.',
+  21: "Three weeks. It's a habit.",
+  30: 'Thirty days. Thirty mornings.',
+  60: 'Two months without missing.',
+  100: 'One hundred mornings.',
+}
 
 function fmt(s: number): string {
   s = Math.max(0, Math.ceil(s))
@@ -33,10 +42,11 @@ function renderHeatmap(heatmap: Stats['heatmap']): string {
 function renderStats(stats: Stats): void {
   const el = document.getElementById('doneStats')
   if (!el) return
-  const streakLabel = stats.streakCurrent === 1 ? 'day streak' : 'day streak'
+  const milestone = MILESTONES[stats.streakCurrent] ?? ''
   el.innerHTML = `
+    ${milestone ? `<div class="done-milestone">${milestone}</div>` : ''}
     <div class="done-stat-row">
-      <div class="done-stat"><div class="v">${stats.streakCurrent}</div><div class="k">${streakLabel}</div></div>
+      <div class="done-stat"><div class="v">${stats.streakCurrent}</div><div class="k">Day streak</div></div>
       <div class="done-stat"><div class="v">${stats.totalSessions}</div><div class="k">Sessions</div></div>
       <div class="done-stat"><div class="v">${stats.totalMinutes}</div><div class="k">Minutes</div></div>
     </div>
@@ -54,8 +64,22 @@ export function showDoneScreen(totalSec: number): void {
   document.getElementById('runScreen')!.classList.remove('show')
   document.getElementById('doneScreen')!.classList.add('show')
   document.getElementById('phaseTag')!.textContent = 'Done'
-  document.getElementById('doneStat')!.textContent =
-    `${fmt(totalSec)} of movement · ${build.rounds} rounds. Same time tomorrow.`
+
+  const presetName = build.activePreset ? PRESETS.find((p) => p.id === build.activePreset)?.name : null
+  const parts = [presetName, `${build.rounds} rounds`, fmt(totalSec)].filter(Boolean)
+  document.getElementById('doneStat')!.textContent = parts.join(' · ')
+
+  const nextEl = document.getElementById('doneNext')
+  if (nextEl) {
+    const rotIdx = build.activePreset ? ROTATION.indexOf(build.activePreset) : -1
+    if (rotIdx >= 0) {
+      const nextId = ROTATION[(rotIdx + 1) % ROTATION.length]!
+      const nextName = PRESETS.find((p) => p.id === nextId)?.name ?? ''
+      nextEl.textContent = nextName ? `${nextName} tomorrow` : ''
+    } else {
+      nextEl.textContent = ''
+    }
+  }
 
   logSession({
     completedAt: Date.now(),
