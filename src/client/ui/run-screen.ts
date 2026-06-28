@@ -67,6 +67,7 @@ export function initRunScreen(onFinish: (totalSec: number) => void, onQuit: () =
     if (e.code === 'Space') { e.preventDefault(); togglePlay() }
     if (e.code === 'ArrowRight') advance(false)
     if (e.code === 'ArrowLeft') back()
+    if (e.code === 'Escape') document.getElementById('quitBtn')!.click()
   })
 
   function togglePlay(): void {
