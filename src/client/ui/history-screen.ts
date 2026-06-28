@@ -1,6 +1,8 @@
 import { getSessions, computeStats, type Stats } from '../storage/local'
 import { PRESETS } from '../data/exercises'
 
+const EFFORT_EMOJI: Record<string, string> = { easy: '😌', good: '💪', hard: '🔥' }
+
 function fmtDate(ms: number): string {
   const d = new Date(ms)
   const now = new Date()
@@ -43,6 +45,7 @@ export function showHistoryScreen(): void {
           return `<div class="hist-row">
             <div class="hist-date">${fmtDate(s.completedAt)}</div>
             <div class="hist-focus">${label}</div>
+            <div class="hist-effort">${s.effort ? (EFFORT_EMOJI[s.effort] ?? '') : ''}</div>
             <div class="hist-meta">${s.rounds}r · ${mins}m</div>
           </div>`
         }).join('')

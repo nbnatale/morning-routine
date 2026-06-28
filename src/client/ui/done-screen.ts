@@ -1,6 +1,6 @@
 import { getState } from '../state/store'
 import { LIBRARY, PRESETS, ROTATION } from '../data/exercises'
-import { logSession, computeStats, type Stats } from '../storage/local'
+import { logSession, updateSessionEffort, computeStats, type Stats } from '../storage/local'
 import type { WorkoutConfig } from '../../shared/types'
 
 const MILESTONES: Record<number, string> = {
@@ -88,7 +88,18 @@ export function showDoneScreen(totalSec: number): void {
     focus: build.activePreset,
     config: buildConfig(),
   })
-    .then(() => computeStats())
+    .then((sessionId) => {
+      document.querySelectorAll<HTMLButtonElement>('.effort-btn').forEach((btn) => {
+        btn.disabled = false
+        btn.addEventListener('click', () => {
+          const effort = btn.dataset['effort'] as 'easy' | 'good' | 'hard'
+          document.querySelectorAll<HTMLButtonElement>('.effort-btn').forEach((b) => b.classList.remove('on'))
+          btn.classList.add('on')
+          updateSessionEffort(sessionId, effort).catch(() => {})
+        })
+      })
+      return computeStats()
+    })
     .then((stats) => renderStats(stats))
     .catch(() => { /* stats are best-effort; silently skip on IDB errors */ })
 }

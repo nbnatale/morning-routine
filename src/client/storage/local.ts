@@ -8,6 +8,7 @@ interface LocalSession {
   rounds: number
   focus: string | null  // presetId
   config: WorkoutConfig
+  effort?: 'easy' | 'good' | 'hard'
 }
 
 interface LocalBuild {
@@ -44,9 +45,17 @@ async function getDB(): Promise<IDBPDatabase<RoutineDB>> {
   return _db
 }
 
-export async function logSession(data: Omit<LocalSession, 'id'>): Promise<void> {
+export async function logSession(data: Omit<LocalSession, 'id'>): Promise<string> {
   const db = await getDB()
-  await db.add('sessions', { id: crypto.randomUUID(), ...data })
+  const id = crypto.randomUUID()
+  await db.add('sessions', { id, ...data })
+  return id
+}
+
+export async function updateSessionEffort(id: string, effort: 'easy' | 'good' | 'hard'): Promise<void> {
+  const db = await getDB()
+  const session = await db.get('sessions', id)
+  if (session) await db.put('sessions', { ...session, effort })
 }
 
 export async function getSessions(): Promise<LocalSession[]> {
