@@ -269,6 +269,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
 export interface Preset {
   id: string
   name: string
+  desc: string
   rounds: number
   intensity: WorkoutConfig['intensity']
   on: { warmup: string[]; circuit: string[]; cooldown: string[] }
@@ -278,39 +279,39 @@ export const ROTATION = ['day-a', 'day-b', 'day-c']
 
 export const PRESETS: Preset[] = [
   {
-    id: 'day-a', name: 'Day A', rounds: 3, intensity: 'steady',
+    id: 'day-a', name: 'Day A', desc: 'Full body · push, legs & core · 3 rounds', rounds: 3, intensity: 'steady',
     on: { warmup: ['arms', 'swings', 'wsquat'], circuit: ['squat', 'pushup', 'lunge', 'plank', 'bridge', 'taps'], cooldown: ['quad', 'ham', 'chest', 'child'] },
   },
   {
-    id: 'day-b', name: 'Day B', rounds: 3, intensity: 'steady',
+    id: 'day-b', name: 'Day B', desc: 'Legs & core · squats, glutes, stability · 3 rounds', rounds: 3, intensity: 'steady',
     on: { warmup: ['swings', 'hipc', 'wsquat'], circuit: ['squat', 'lunge', 'wallsit', 'bridge', 'deadbug', 'birddog'], cooldown: ['quad', 'ham', 'fig4', 'twist'] },
   },
   {
-    id: 'day-c', name: 'Day C', rounds: 2, intensity: 'steady',
+    id: 'day-c', name: 'Day C', desc: 'Upper & recovery · push, arms, quiet core · 2 rounds', rounds: 2, intensity: 'steady',
     on: { warmup: ['arms', 'catcow', 'hipc'], circuit: ['pushup', 'dips', 'sideplank', 'taps', 'calf'], cooldown: ['chest', 'child', 'twist'] },
   },
   {
-    id: 'standard', name: 'Standard', rounds: 3, intensity: 'steady',
+    id: 'standard', name: 'Standard', desc: 'Full body · balanced mix · 3 rounds', rounds: 3, intensity: 'steady',
     on: { warmup: ['arms', 'swings', 'wsquat'], circuit: ['squat', 'pushup', 'lunge', 'plank', 'bridge', 'taps'], cooldown: ['quad', 'ham', 'chest', 'child'] },
   },
   {
-    id: 'balanced', name: 'Balanced', rounds: 3, intensity: 'steady',
+    id: 'balanced', name: 'Balanced', desc: 'Full body · strength + stability · 3 rounds', rounds: 3, intensity: 'steady',
     on: { warmup: ['arms', 'swings', 'hipc'], circuit: ['squat', 'pushup', 'lunge', 'bridge', 'plank', 'birddog', 'taps'], cooldown: ['quad', 'ham', 'chest', 'child', 'twist'] },
   },
   {
-    id: 'strength', name: 'Strength', rounds: 4, intensity: 'strong',
+    id: 'strength', name: 'Strength', desc: 'Heavy push & legs · long holds · 4 rounds', rounds: 4, intensity: 'strong',
     on: { warmup: ['arms', 'swings', 'wsquat'], circuit: ['squat', 'pushup', 'lunge', 'dips', 'bridge', 'plank', 'wallsit'], cooldown: ['quad', 'ham', 'chest', 'child'] },
   },
   {
-    id: 'legs', name: 'Legs & glutes', rounds: 4, intensity: 'steady',
+    id: 'legs', name: 'Legs & glutes', desc: 'Lower body focus · burn out the legs · 4 rounds', rounds: 4, intensity: 'steady',
     on: { warmup: ['swings', 'hipc', 'wsquat'], circuit: ['squat', 'lunge', 'bridge', 'wallsit', 'calf'], cooldown: ['quad', 'ham', 'fig4'] },
   },
   {
-    id: 'core', name: 'Core', rounds: 3, intensity: 'steady',
+    id: 'core', name: 'Core', desc: 'Stability & anti-rotation · silent floor work · 3 rounds', rounds: 3, intensity: 'steady',
     on: { warmup: ['catcow', 'hipc', 'wsquat'], circuit: ['plank', 'deadbug', 'birddog', 'taps', 'sideplank', 'bridge'], cooldown: ['child', 'twist', 'fig4'] },
   },
   {
-    id: 'quick', name: 'Quick', rounds: 2, intensity: 'steady',
+    id: 'quick', name: 'Quick', desc: 'Short full-body hit · in and out · 2 rounds', rounds: 2, intensity: 'steady',
     on: { warmup: ['arms', 'wsquat'], circuit: ['squat', 'pushup', 'lunge', 'plank'], cooldown: ['ham', 'child'] },
   },
 ]

@@ -5,11 +5,20 @@ import { getState, setState } from '../state/store'
 import { computeStats, getLastSession } from '../storage/local'
 import type { Phase } from '../../shared/types'
 
-async function computeSuggested(): Promise<string> {
+interface BuildHints {
+  suggestedId: string
+  doneToday: boolean
+  todayFocus: string | null
+}
+
+async function loadBuildHints(): Promise<BuildHints> {
   const last = await getLastSession()
-  if (!last?.focus || !ROTATION.includes(last.focus)) return ROTATION[0]!
+  const doneToday = !!last && new Date(last.completedAt).toDateString() === new Date().toDateString()
+  if (!last?.focus || !ROTATION.includes(last.focus)) {
+    return { suggestedId: ROTATION[0]!, doneToday, todayFocus: last?.focus ?? null }
+  }
   const idx = ROTATION.indexOf(last.focus)
-  return ROTATION[(idx + 1) % ROTATION.length]!
+  return { suggestedId: ROTATION[(idx + 1) % ROTATION.length]!, doneToday, todayFocus: last.focus }
 }
 
 function fmt(s: number): string {
@@ -55,10 +64,19 @@ export function initBuildScreen(onBegin: () => void): void {
   refreshSummary()
 
   const focusSubLabel = buildSection.querySelector<HTMLSpanElement>('.opt-label span')
-  computeSuggested().then((id) => {
-    const p = PRESETS.find((pr) => pr.id === id)
-    if (p) { applyPreset(p); syncSegs(); syncFocusPills(); refreshSummary() }
-    if (focusSubLabel && p) focusSubLabel.textContent = `${p.name} up next · or pick another`
+  const restBanner = document.getElementById('restBanner')
+  const restBannerText = document.getElementById('restBannerText')
+
+  loadBuildHints().then(({ suggestedId, doneToday, todayFocus }) => {
+    const next = PRESETS.find((pr) => pr.id === suggestedId)
+    if (next) { applyPreset(next); syncSegs(); syncFocusPills(); refreshSummary() }
+    if (focusSubLabel && next) focusSubLabel.textContent = `${next.name} up next · or pick another`
+
+    if (doneToday && restBanner && restBannerText) {
+      const todayPreset = todayFocus ? PRESETS.find((pr) => pr.id === todayFocus) : undefined
+      restBannerText.innerHTML = `${todayPreset?.name ?? 'Today\'s session'} complete<small>${next?.name ?? 'Next session'} is up next</small>`
+      restBanner.removeAttribute('hidden')
+    }
   }).catch(() => {})
 
   // round segment
@@ -133,6 +151,8 @@ export function initBuildScreen(onBegin: () => void): void {
       row.classList.toggle('on', !!getState().build.selected[id])
       row.classList.remove('open')
     })
+    const descEl = document.getElementById('presetDesc')
+    if (descEl) descEl.textContent = p.desc
   }
 
   function selectedIds(phase: Phase): string[] {
