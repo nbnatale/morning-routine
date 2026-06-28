@@ -238,6 +238,7 @@ export function showBuildScreen(): void {
   document.getElementById('buildScreen')!.style.display = 'flex'
   document.getElementById('runScreen')!.classList.remove('show')
   document.getElementById('doneScreen')!.classList.remove('show')
+  document.getElementById('historyScreen')!.classList.remove('show')
   document.getElementById('phaseTag')!.textContent = 'Build'
   loadBuildStreak()
 }
