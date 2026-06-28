@@ -1,9 +1,16 @@
-import { LIBRARY, PRESETS, type Preset } from '../data/exercises'
+import { LIBRARY, PRESETS, ROTATION, type Preset } from '../data/exercises'
 import { tempoSummary } from '../engine/tempo'
 import { buildPlan } from '../engine/plan'
 import { getState, setState } from '../state/store'
-import { computeStats } from '../storage/local'
+import { computeStats, getLastSession } from '../storage/local'
 import type { Phase } from '../../shared/types'
+
+async function computeSuggested(): Promise<string> {
+  const last = await getLastSession()
+  if (!last?.focus || !ROTATION.includes(last.focus)) return ROTATION[0]!
+  const idx = ROTATION.indexOf(last.focus)
+  return ROTATION[(idx + 1) % ROTATION.length]!
+}
 
 function fmt(s: number): string {
   s = Math.max(0, Math.ceil(s))
@@ -39,13 +46,20 @@ export function initBuildScreen(onBegin: () => void): void {
     if (!(ex.id in build.selected)) build.selected[ex.id] = ex.id === ex.id
   }))
 
-  // apply default preset
+  // apply default preset synchronously, then override async with rotation suggestion
   applyPreset(PRESETS.find((p) => p.id === build.activePreset) ?? PRESETS[0])
 
   buildFocusPills()
   buildExerciseRows()
   syncSegs()
   refreshSummary()
+
+  const focusSubLabel = buildSection.querySelector<HTMLSpanElement>('.opt-label span')
+  computeSuggested().then((id) => {
+    const p = PRESETS.find((pr) => pr.id === id)
+    if (p) { applyPreset(p); syncSegs(); syncFocusPills(); refreshSummary() }
+    if (focusSubLabel && p) focusSubLabel.textContent = `${p.name} up next · or pick another`
+  }).catch(() => {})
 
   // round segment
   roundSeg.addEventListener('click', (e) => {

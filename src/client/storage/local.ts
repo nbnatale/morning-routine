@@ -54,6 +54,11 @@ export async function getSessions(): Promise<LocalSession[]> {
   return db.getAllFromIndex('sessions', 'by_date')
 }
 
+export async function getLastSession(): Promise<LocalSession | undefined> {
+  const sessions = await getSessions()
+  return sessions[sessions.length - 1]
+}
+
 export async function saveBuilder(name: string, config: WorkoutConfig): Promise<string> {
   const db = await getDB()
   const id = crypto.randomUUID()

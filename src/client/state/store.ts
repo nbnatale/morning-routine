@@ -32,7 +32,7 @@ const state: AppState = {
     rounds: 3,
     intensity: 'steady',
     metro: true,
-    activePreset: 'standard',
+    activePreset: 'day-a',
     selected: {},
   },
   run: {
