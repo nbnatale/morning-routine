@@ -1,71 +1,54 @@
 # Morning Routine
 
-A quiet bodyweight workout app for mornings in small rooms — no jumping, bare-feet friendly. Mobile-first PWA. Built on Cloudflare Workers + D1 + KV.
+A personal bodyweight workout timer — quiet, bare-feet friendly, built for small rooms and neighbours below. No jumping. Mobile-first PWA.
 
-## Architecture
+Built entirely with [Claude Code](https://claude.ai/code).
 
-```
-Client (Vite + vanilla TS)  →  dist/  ←  served by CF Workers Static Assets
-                                            ↓
-                                     Worker (Hono)
-                                            ↓
-                                    D1 (SQLite) + KV
-```
+## What it does
+
+- Three prebuilt day presets (Day A / B / C) that rotate automatically based on your last session
+- Guided exercise form with tempo cues and a breathing orb on the run screen
+- Local-first: all session history and streaks live in IndexedDB — no account needed
+- Installable as a PWA (works offline after first load)
+
+## Stack
 
 - **Frontend:** Vanilla TypeScript, Vite, no framework
 - **Backend:** Hono on Cloudflare Workers
-- **Database:** Cloudflare D1 (SQLite)
-- **Sessions / cache / tokens:** Cloudflare KV
-- **Auth:** Passkeys (WebAuthn) + email magic-link (Resend)
+- **Database:** Cloudflare D1 (exercise library)
+- **Cache:** Cloudflare KV (exercise library cache)
 - **PWA:** vite-plugin-pwa (Workbox)
 
 ## Local dev
 
 ```bash
-cp .dev.vars.example .dev.vars   # fill in secrets
 npm install
-npm run dev                       # vite on :5173, worker API on :8787
+npm run dev     # Vite on :5173
 ```
 
-Open [http://localhost:5173](http://localhost:5173). API calls at `/api/*` proxy to the worker.
-
-## Build
-
-```bash
-npm run build       # Vite output → dist/
-```
+Open [http://localhost:5173](http://localhost:5173). The worker API proxies through Vite in dev mode.
 
 ## Deploy
 
-See **CLOUDFLARE_DEPLOYMENT_GUIDE.md** for the full provisioning runbook (create D1, KV, set secrets, deploy).
-
-Short version after provisioning:
 ```bash
 npm run build
-npx wrangler deploy
+wrangler deploy
 ```
 
-GitHub Actions deploys automatically on push to `main` — add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` as repo secrets first.
+See **CLOUDFLARE_DEPLOYMENT_GUIDE.md** for provisioning D1 and KV from scratch.
 
-## Environment / bindings
+## Bindings
 
 | Name | Type | Purpose |
 |---|---|---|
-| `DB` | D1 | Primary database |
-| `SESSIONS` | KV | Auth sessions, magic-link tokens, exercise cache |
-| `SESSION_SECRET` | Secret | HMAC key for signed session cookies |
-| `RESEND_API_KEY` | Secret | Magic-link emails via Resend |
-| `RP_ID` | Secret | WebAuthn relying-party ID (e.g. `morningroutine.app`) |
-| `RP_ORIGIN` | Secret | Full origin (e.g. `https://morningroutine.app`) |
+| `DB` | D1 | Exercise library |
+| `SESSIONS` | KV | Exercise library cache |
+| `ASSETS` | Static Assets | SPA and PWA files |
 
-See `.dev.vars.example` for local values.
+## Status
 
-## Phases
-
-- **Phase 0** ✅ Scaffold, skeleton Worker + Vite, GitHub, CI
-- **Phase 1** Port prototype → modular SPA (full feature parity)
-- **Phase 2** PWA, offline, local-first IndexedDB persistence
-- **Phase 3** D1 schema, migrations, exercises API
-- **Phase 4** Auth (passkeys + magic-link), cloud sync
-- **Phase 5** Sharing + gallery
-- **Phase 6** Feature sets (voice, haptics, history, themes, …)
+- **Phase 0** ✅ Scaffold — Cloudflare Workers + Vite + Hono skeleton
+- **Phase 1** ✅ Full SPA — modular TypeScript, all screens, timer engine
+- **Phase 2** ✅ PWA — offline support, IndexedDB session history, streaks
+- **Phase 3** ✅ D1 exercises API — server-side library with KV cache, client fallback
+- **Phase 4** ✅ Day rotation — A/B/C presets with auto-suggest based on last session
