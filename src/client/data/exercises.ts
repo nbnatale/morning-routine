@@ -275,7 +275,7 @@ export interface Preset {
   on: { warmup: string[]; circuit: string[]; cooldown: string[] }
 }
 
-export const ROTATION = ['day-a', 'day-b', 'day-c']
+export const ROTATION = ['day-a', 'day-b', 'day-c', 'day-d']
 
 export const PRESETS: Preset[] = [
   {
@@ -289,6 +289,10 @@ export const PRESETS: Preset[] = [
   {
     id: 'day-c', name: 'Day C', desc: 'Upper & recovery · push, arms, quiet core · 2 rounds', rounds: 2, intensity: 'steady',
     on: { warmup: ['arms', 'catcow', 'hipc'], circuit: ['pushup', 'dips', 'sideplank', 'taps', 'calf'], cooldown: ['chest', 'child', 'twist'] },
+  },
+  {
+    id: 'day-d', name: 'Day D', desc: 'Mobility & recovery · floor work, full stretch · 2 rounds', rounds: 2, intensity: 'easy',
+    on: { warmup: ['arms', 'swings', 'hipc', 'catcow', 'wsquat'], circuit: ['plank', 'bridge', 'deadbug', 'birddog'], cooldown: ['quad', 'ham', 'fig4', 'chest', 'child', 'twist'] },
   },
   {
     id: 'standard', name: 'Standard', desc: 'Full body · balanced mix · 3 rounds', rounds: 3, intensity: 'steady',
