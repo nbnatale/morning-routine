@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.worker.json && tsc --noEmit -p tsconfig.scripts.json",
     "lint": "eslint src",
     "format": "prettier --write src",
+    "icons:gen": "node scripts/gen-icons.mjs",
     "seed:gen": "tsx scripts/seed-exercises.ts",
     "seed:local": "npm run seed:gen && wrangler d1 execute morning-routine-db --local --file=scripts/seed.sql",
     "seed:remote": "npm run seed:gen && wrangler d1 execute morning-routine-db --remote --file=scripts/seed.sql"
