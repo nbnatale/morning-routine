@@ -3,7 +3,7 @@ import { tempoSummary } from '../engine/tempo'
 import { buildPlan } from '../engine/plan'
 import { getState, setState } from '../state/store'
 import { computeStats, getLastSession } from '../storage/local'
-import type { Phase } from '../../shared/types'
+import type { Phase, WorkoutConfig } from '../../shared/types'
 
 interface BuildHints {
   suggestedId: string
@@ -36,7 +36,7 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;')
 }
 
-export function initBuildScreen(onBegin: () => void): void {
+export function initBuildScreen(onBegin: () => void, shared?: WorkoutConfig | null): void {
   const buildSection = document.getElementById('buildScreen')!
   const focusRow = document.getElementById('focusRow')!
   const roundSeg = document.getElementById('roundSeg')!
@@ -56,10 +56,13 @@ export function initBuildScreen(onBegin: () => void): void {
   }))
 
   // apply default preset synchronously, then override async with rotation suggestion
-  applyPreset(PRESETS.find((p) => p.id === build.activePreset) ?? PRESETS[0])
+  // (a shared config from a /s/:slug link wins over both)
+  if (shared) applyConfig(shared)
+  else applyPreset(PRESETS.find((p) => p.id === build.activePreset) ?? PRESETS[0])
 
   buildFocusPills()
   buildExerciseRows()
+  syncFocusPills()
   syncSegs()
   refreshSummary()
 
@@ -69,11 +72,11 @@ export function initBuildScreen(onBegin: () => void): void {
 
   loadBuildHints().then(({ suggestedId, doneToday, todayFocus }) => {
     const next = PRESETS.find((pr) => pr.id === suggestedId)
-    if (next) { applyPreset(next); syncSegs(); syncFocusPills(); refreshSummary() }
+    if (next && !shared) { applyPreset(next); syncSegs(); syncFocusPills(); refreshSummary() }
     focusRow.querySelectorAll<HTMLButtonElement>('.fpill').forEach((b) => {
       b.classList.toggle('suggested', b.dataset['id'] === suggestedId)
     })
-    if (focusSubLabel && next) focusSubLabel.textContent = `${next.name} up next · or pick another`
+    if (focusSubLabel && next && !shared) focusSubLabel.textContent = `${next.name} up next · or pick another`
 
     if (doneToday && restBanner && restBannerText) {
       const todayPreset = todayFocus ? PRESETS.find((pr) => pr.id === todayFocus) : undefined
@@ -156,6 +159,27 @@ export function initBuildScreen(onBegin: () => void): void {
     })
     const descEl = document.getElementById('presetDesc')
     if (descEl) descEl.textContent = p.desc
+  }
+
+  function applyConfig(cfg: WorkoutConfig): void {
+    const phases: Phase[] = ['warmup', 'circuit', 'cooldown']
+    phases.forEach((ph) => LIBRARY[ph].forEach((ex) => {
+      setState((s) => { s.build.selected[ex.id] = cfg[ph].includes(ex.id) })
+    }))
+    const presetId = PRESETS.some((p) => p.id === cfg.presetId) ? cfg.presetId : null
+    setState((s) => {
+      s.build.rounds = Math.min(5, Math.max(2, cfg.rounds))
+      s.build.intensity = cfg.intensity
+      s.build.metro = cfg.metro
+      s.build.activePreset = presetId
+    })
+    document.querySelectorAll<HTMLDivElement>('.exrow').forEach((row) => {
+      const id = row.dataset['id']!
+      row.classList.toggle('on', !!getState().build.selected[id])
+      row.classList.remove('open')
+    })
+    const descEl = document.getElementById('presetDesc')
+    if (descEl) descEl.textContent = 'Shared workout · loaded from link'
   }
 
   function selectedIds(phase: Phase): string[] {
