@@ -70,6 +70,9 @@ export function initBuildScreen(onBegin: () => void): void {
   loadBuildHints().then(({ suggestedId, doneToday, todayFocus }) => {
     const next = PRESETS.find((pr) => pr.id === suggestedId)
     if (next) { applyPreset(next); syncSegs(); syncFocusPills(); refreshSummary() }
+    focusRow.querySelectorAll<HTMLButtonElement>('.fpill').forEach((b) => {
+      b.classList.toggle('suggested', b.dataset['id'] === suggestedId)
+    })
     if (focusSubLabel && next) focusSubLabel.textContent = `${next.name} up next · or pick another`
 
     if (doneToday && restBanner && restBannerText) {

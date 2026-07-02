@@ -42,8 +42,9 @@ export function showHistoryScreen(): void {
           const preset = s.focus ? PRESETS.find((p) => p.id === s.focus) : undefined
           const label = preset?.name ?? 'Custom'
           const mins = Math.round(s.durationSec / 60)
+          const dateLabel = fmtDate(s.completedAt)
           return `<div class="hist-row">
-            <div class="hist-date">${fmtDate(s.completedAt)}</div>
+            <div class="hist-date${dateLabel === 'Today' ? ' today' : ''}">${dateLabel}</div>
             <div class="hist-focus">${label}</div>
             <div class="hist-effort">${s.effort ? (EFFORT_EMOJI[s.effort] ?? '') : ''}</div>
             <div class="hist-meta">${s.rounds}r · ${mins}m</div>

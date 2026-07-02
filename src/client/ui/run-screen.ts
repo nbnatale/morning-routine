@@ -180,6 +180,7 @@ export function initRunScreen(onFinish: (totalSec: number) => void, onQuit: () =
     const seg = run.plan[run.idx]
     const col = seg.type === 'rest' ? cssv('--sage') : (seg.phase === 'circuit' ? cssv('--terra') : cssv('--brass'))
     ring.style.stroke = col
+    ring.style.filter = `drop-shadow(0 0 6px ${col}55)`
     kindLbl.textContent = seg.kind
     exName.textContent = seg.name
     const r = seg.round
