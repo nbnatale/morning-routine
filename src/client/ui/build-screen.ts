@@ -226,7 +226,7 @@ export function initBuildScreen(onBegin: () => void, shared?: WorkoutConfig | nu
         const mistakeHtml = ex.mistake
           ? `<div class="note"><span class="ic">!</span><span><b>Common slip:</b> ${escapeHtml(ex.mistake)}</span></div>` : ''
         const quietHtml = ex.quiet
-          ? `<div class="note"><span class="ic">~</span><span><b>Quiet note:</b> ${escapeHtml(ex.quiet)}</span></div>` : ''
+          ? `<div class="note"><span class="ic">~</span><span><b>Tip:</b> ${escapeHtml(ex.quiet)}</span></div>` : ''
         const summary = tempoSummary(ex.tempo)
 
         row.innerHTML = `

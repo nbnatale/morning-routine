@@ -1,6 +1,6 @@
 # Morning Routine
 
-A personal bodyweight workout timer — quiet, bare-feet friendly, built for small rooms and neighbours below. No jumping. Mobile-first PWA.
+A personal bodyweight workout timer — low-impact floor work built for small rooms. Mobile-first PWA.
 
 Built entirely with [Claude Code](https://claude.ai/code).
 

@@ -51,7 +51,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Sink down slowly over three counts, as deep as is comfortable.',
         'Stand back up over two counts. No load yet — this just greases the knees and hips.',
       ],
-      quiet: 'Stay flat-footed and quiet; no bouncing at the bottom.',
+      quiet: 'Stay flat-footed; no bouncing at the bottom.',
     },
   ],
 
@@ -87,7 +87,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Stand tall, hands on your hips or by your sides.',
         'Step one foot straight back and lower until both knees bend to about 90°, front shin vertical.',
         'Push through your front heel to return to standing.',
-        'Alternate legs each rep. Stepping back rather than forward is gentler on the knees and quieter.',
+        'Alternate legs each rep. Stepping back rather than forward is gentler on the knees.',
       ],
       mistake: 'Front knee drifting past the toes — keep the front shin vertical and the weight in that heel.',
       quiet: 'Place the back foot down softly rather than tapping it.',
@@ -102,7 +102,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Breathe steadily — don\'t hold your breath.',
       ],
       mistake: 'Hips piking up or sagging down — hold a flat line from shoulders to heels.',
-      quiet: 'Fully silent — a perfect third-floor move.',
+      quiet: 'Push the floor away through your forearms to keep the shoulders active.',
     },
     {
       id: 'bridge', name: 'Glute bridges', tag: 'Glutes', phase: 'circuit', dur: 30,
@@ -114,7 +114,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Lower slowly with control — don\'t just drop.',
       ],
       mistake: 'Arching the lower back instead of using the glutes — keep ribs down and squeeze the glutes to lift.',
-      quiet: 'Silent and floor-based.',
+      quiet: 'Drive through the heels — curling the toes up helps you find the glutes.',
     },
     {
       id: 'taps', name: 'Shoulder taps', tag: 'Core · full body', phase: 'circuit', dur: 30,
@@ -123,10 +123,10 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Start in a high plank (hands under shoulders), feet a little wider than usual for stability.',
         'Without letting your hips rock side to side, lift one hand and tap the opposite shoulder.',
         'Return it and switch hands. Slow and steady beats fast.',
-        'This is the quiet stand-in for mountain climbers — same core and shoulder work, no jumping.',
+        'A low-impact stand-in for mountain climbers — same core and shoulder work.',
       ],
       mistake: 'Hips swaying with each tap — widen your feet and brace hard to keep them still.',
-      quiet: 'No impact at all — the whole point of the swap.',
+      quiet: 'Widen your feet for more stability; bring them together to make it harder.',
     },
     {
       id: 'wallsit', name: 'Wall sit', tag: 'Legs', phase: 'circuit', dur: 35,
@@ -138,7 +138,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Breathe steadily through the burn.',
       ],
       mistake: 'Knees pushing past the toes — walk your feet out until the shins are vertical.',
-      quiet: 'Completely silent.',
+      quiet: 'Keep your hands off your thighs — cross your arms or let them hang.',
     },
     {
       id: 'deadbug', name: 'Dead bugs', tag: 'Core', phase: 'circuit', dur: 35,
@@ -150,7 +150,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Move slowly — control is the whole exercise.',
       ],
       mistake: 'Lower back arching off the floor — only reach as far as you can while keeping it pressed flat.',
-      quiet: 'Floor-based and silent.',
+      quiet: 'Exhale as you extend — it keeps the ribs down and the back flat.',
     },
     {
       id: 'birddog', name: 'Bird dogs', tag: 'Core · back', phase: 'circuit', dur: 35,
@@ -162,7 +162,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Switch sides each rep.',
       ],
       mistake: 'Hips twisting toward the lifted leg — keep them level, as if balancing a glass on your back.',
-      quiet: 'Silent and controlled.',
+      quiet: 'Reach long through fingertips and heel rather than lifting high.',
     },
     {
       id: 'calf', name: 'Calf raises', tag: 'Legs', phase: 'circuit', dur: 30,
@@ -198,7 +198,7 @@ export const LIBRARY: Record<Phase, Exercise[]> = {
         'Switch sides at the halfway point.',
       ],
       mistake: 'Hips sinking toward the floor — lift them and hold the straight line.',
-      quiet: 'Silent.',
+      quiet: 'Stagger your feet or drop the bottom knee if the stack feels shaky.',
     },
   ],
 
@@ -287,7 +287,7 @@ export const PRESETS: Preset[] = [
     on: { warmup: ['swings', 'hipc', 'wsquat'], circuit: ['squat', 'lunge', 'wallsit', 'bridge', 'deadbug', 'birddog'], cooldown: ['quad', 'ham', 'fig4', 'twist'] },
   },
   {
-    id: 'day-c', name: 'Day C', desc: 'Upper & recovery · push, arms, quiet core · 2 rounds', rounds: 2, intensity: 'steady',
+    id: 'day-c', name: 'Day C', desc: 'Upper & recovery · push, arms, core · 2 rounds', rounds: 2, intensity: 'steady',
     on: { warmup: ['arms', 'catcow', 'hipc'], circuit: ['pushup', 'dips', 'sideplank', 'taps', 'calf'], cooldown: ['chest', 'child', 'twist'] },
   },
   {
@@ -311,7 +311,7 @@ export const PRESETS: Preset[] = [
     on: { warmup: ['swings', 'hipc', 'wsquat'], circuit: ['squat', 'lunge', 'bridge', 'wallsit', 'calf'], cooldown: ['quad', 'ham', 'fig4'] },
   },
   {
-    id: 'core', name: 'Core', desc: 'Stability & anti-rotation · silent floor work · 3 rounds', rounds: 3, intensity: 'steady',
+    id: 'core', name: 'Core', desc: 'Stability & anti-rotation · floor work · 3 rounds', rounds: 3, intensity: 'steady',
     on: { warmup: ['catcow', 'hipc', 'wsquat'], circuit: ['plank', 'deadbug', 'birddog', 'taps', 'sideplank', 'bridge'], cooldown: ['child', 'twist', 'fig4'] },
   },
   {

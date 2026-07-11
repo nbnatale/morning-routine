@@ -23,7 +23,7 @@ export default defineConfig({
       manifest: {
         name: 'Morning Routine',
         short_name: 'Morning',
-        description: 'Quiet bodyweight calisthenics workout timer.',
+        description: 'Bodyweight calisthenics workout timer.',
         theme_color: '#141d19',
         background_color: '#141d19',
         display: 'standalone',
